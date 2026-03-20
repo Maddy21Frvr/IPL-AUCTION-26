@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IPL Auction</title>
+</head>
+<body>
+  <h1>IPL Auction Multiplayer 🚀</h1>
+  <p>Server is working!</p>
+
+  <script>
+    const ws = new WebSocket("wss://" + location.host);
+
+    ws.onopen = () => {
+      console.log("Connected to server");
+      ws.send(JSON.stringify({ type: "GET_ROOMS" }));
+    };
+
+    ws.onmessage = (msg) => {
+      console.log("Message:", msg.data);
+    };
+  </script>
+</body>
+</html>
