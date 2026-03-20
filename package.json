@@ -1,0 +1,12 @@
+{
+  "name": "ipl-mega-auction",
+  "version": "1.0.0",
+  "description": "IPL Mega Auction 2025 — multiplayer real-time",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}

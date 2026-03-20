@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: ipl-mega-auction
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
