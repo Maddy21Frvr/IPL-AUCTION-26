@@ -4,20 +4,69 @@
   <title>IPL Auction</title>
 </head>
 <body>
-  <h1>IPL Auction Multiplayer 🚀</h1>
-  <p>Server is working!</p>
 
-  <script>
-    const ws = new WebSocket("wss://" + location.host);
+<h1>IPL Auction Multiplayer 🚀</h1>
 
-    ws.onopen = () => {
-      console.log("Connected to server");
-      ws.send(JSON.stringify({ type: "GET_ROOMS" }));
-    };
+<input id="name" placeholder="Your Name">
+<input id="team" placeholder="Team Name">
+<button onclick="createRoom()">Create Room</button>
+<button onclick="getRooms()">Refresh Rooms</button>
 
-    ws.onmessage = (msg) => {
-      console.log("Message:", msg.data);
-    };
-  </script>
+<h2>Rooms:</h2>
+<ul id="rooms"></ul>
+
+<script>
+const ws = new WebSocket("wss://" + location.host);
+
+ws.onmessage = (msg) => {
+  const data = JSON.parse(msg.data);
+
+  if (data.type === "ROOM_LIST") {
+    const list = document.getElementById("rooms");
+    list.innerHTML = "";
+
+    data.rooms.forEach(room => {
+      const li = document.createElement("li");
+      li.innerText = room.name + " (" + room.id + ")";
+
+      const btn = document.createElement("button");
+      btn.innerText = "Join";
+      btn.onclick = () => joinRoom(room.id);
+
+      li.appendChild(btn);
+      list.appendChild(li);
+    });
+  }
+
+  console.log(data);
+};
+
+function createRoom() {
+  ws.send(JSON.stringify({
+    type: "CREATE_ROOM",
+    roomName: "Auction Room",
+    playerId: Date.now().toString(),
+    name: document.getElementById("name").value,
+    team: document.getElementById("team").value,
+    budget: 100
+  }));
+}
+
+function getRooms() {
+  ws.send(JSON.stringify({ type: "GET_ROOMS" }));
+}
+
+function joinRoom(id) {
+  ws.send(JSON.stringify({
+    type: "JOIN_ROOM",
+    roomId: id,
+    playerId: Date.now().toString(),
+    name: document.getElementById("name").value,
+    team: document.getElementById("team").value,
+    budget: 100
+  }));
+}
+</script>
+
 </body>
 </html>
